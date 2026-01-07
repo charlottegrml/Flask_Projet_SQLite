@@ -18,7 +18,7 @@ def hello_world():
 
 @app.route('/fiche_nom', methods=['GET'])
 def formulaire_client():
-    return render_template('') 
+    return render_template('formulaire2.html') 
 
 @app.route('/lecture')
 def lecture():
