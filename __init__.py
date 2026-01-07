@@ -16,9 +16,34 @@ def est_authentifie():
 def hello_world():
     return render_template('hello.html')
 
-@app.route('/fiche_nom', methods=['GET'])
-def formulaire_client():
-    return render_template('formulaire2.html') 
+from flask2 import Response
+def check_user_auth():
+    auth = request.authorization
+    return auth and auth.username == 'user' and auth.password == '12345'
+
+@app.route('/fiche_nom/resultat', methods=['POST'])
+def fiche_nom_resultat():
+
+    if not check_user_auth():
+        return Response(
+            "Accès refusé",
+            401,
+            {'WWW-Authenticate': 'Basic realm="User Access"'}
+        )
+
+    nom = request.form['nom']
+
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        'SELECT * FROM clients WHERE nom = ?',
+        (nom,)
+    )
+    data = cursor.fetchall()
+    conn.close()
+
+    return render_template('read_data.html', data=data)
+
 
 @app.route('/lecture')
 def lecture():
