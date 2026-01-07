@@ -16,7 +16,7 @@ def est_authentifie():
 def hello_world():
     return render_template('hello.html')
 
-from flask2 import Response
+from flask import Response
 def check_user_auth():
     auth = request.authorization
     return auth and auth.username == 'user' and auth.password == '12345'
