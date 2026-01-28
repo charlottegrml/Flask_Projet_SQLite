@@ -21,24 +21,22 @@ def check_user_auth():
     auth = request.authorization
     return auth and auth.username == 'user' and auth.password == '12345'
 
-@app.route('/fiche_nom/', methods=['GET', 'POST'])
-def fiche_nom():
-    data = []
-
-    if request.method == 'POST':
-        nom = request.form.get('nom')
-
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
-        cursor.execute(
-            "SELECT * FROM clients WHERE nom LIKE ?",
-            ('%' + nom + '%',)
+@app.route('/fiche_nom/<string:nom>')
+def Readfichenom(nom):
+    auth = request.authorization
+    if not auth or not (auth.username == 'user' and auth.password == '12345'):
+        return Response(
+            'Connexion requise. Identifiants : user / 12345', 401,
+            {'WWW-Authenticate': 'Basic realm="Login Required"'}
         )
-        data = cursor.fetchall()
-        conn.close()
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients WHERE nom = ?', (nom.upper(),))
 
-    return render_template('fiche_nom.html', data=data)
+    data = cursor.fetchall()
+    conn.close()
 
+   return render_template('read_data.html', data=data)
 
 @app.route('/lecture')
 def lecture():
