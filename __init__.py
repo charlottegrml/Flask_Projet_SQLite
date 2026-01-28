@@ -21,28 +21,23 @@ def check_user_auth():
     auth = request.authorization
     return auth and auth.username == 'user' and auth.password == '12345'
 
-@app.route('/fiche_nom/resultat', methods=['POST'])
-def fiche_nom_resultat():
+@app.route('/fiche_nom/', methods=['GET', 'POST'])
+def fiche_nom():
+    data = []
 
-    if not check_user_auth():
-        return Response(
-            "Accès refusé",
-            401,
-            {'WWW-Authenticate': 'Basic realm="User Access"'}
+    if request.method == 'POST':
+        nom = request.form.get('nom')
+
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT * FROM clients WHERE nom LIKE ?",
+            ('%' + nom + '%',)
         )
+        data = cursor.fetchall()
+        conn.close()
 
-    nom = request.form['nom']
-
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute(
-        'SELECT * FROM clients WHERE nom = ?',
-        (nom,)
-    )
-    data = cursor.fetchall()
-    conn.close()
-
-    return render_template('read_data.html', data=data)
+    return render_template('fiche_nom.html', data=data)
 
 
 @app.route('/lecture')
