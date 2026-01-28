@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container bottomForm">
+    <h2 class="text-center">Recherche par nom</h2>
+
+    <div class="row">
+        <div class="col-sm-3"></div>
+
+        <form method="POST" class="col-sm-6">
+            <div class="form-group">
+                <label for="nom">Nom du client</label>
+                <input type="text" name="nom" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">
+                Rechercher
+            </button>
+        </form>
+
+        <div class="col-sm-3"></div>
+    </div>
+
+    {% if data %}
+    <hr>
+    <h4 class="text-center">Résultats</h4>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in data %}
+            <tr>
+                <td>{{ client[0] }}</td>
+                <td>{{ client[1] }}</td>
+                <td>{{ client[2] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock content %}
