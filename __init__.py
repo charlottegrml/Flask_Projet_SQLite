@@ -36,7 +36,7 @@ def Readfichenom(nom):
     data = cursor.fetchall()
     conn.close()
 
-   return render_template('read_data.html', data=data)
+   return render_template('fiche_nom.html', data=data)
 
 @app.route('/lecture')
 def lecture():
