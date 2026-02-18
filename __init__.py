@@ -1,6 +1,6 @@
-from flask2 import Flask, render_template_string, render_template, jsonify, request, redirect, url_for, session
-from flask2 import render_template
-from flask2 import json
+from Flask import Flask, render_template_string, render_template, jsonify, request, redirect, url_for, session
+from Flask import render_template
+from Flask import json
 from urllib.request import urlopen
 from werkzeug.utils import secure_filename
 import sqlite3
