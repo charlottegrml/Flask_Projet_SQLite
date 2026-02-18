@@ -1,56 +1,72 @@
 <!doctype html>
-<title>Flask Server</title>
-<h1> Bienvenue sur la page d'accueil ! </h1>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 60px;
-            background-color: #f9f9f9;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        .box {
-            max-width: 420px;
-            padding: 30px;
+
+        .card {
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 40px;
+            width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            text-align: center;
         }
+
         h1 {
             margin-bottom: 25px;
+            color: #333;
         }
+
         a.button {
             display: block;
-            text-align: center;
-            padding: 12px;
-            margin: 12px 0;
+            padding: 14px;
+            margin: 15px 0;
             text-decoration: none;
             color: white;
-            background-color: #007BFF;
-            border-radius: 6px;
+            background: #4e73df;
+            border-radius: 8px;
             font-weight: bold;
+            transition: 0.3s;
         }
-        a.button.admin {
-            background-color: #28a745;
-        }
+
         a.button:hover {
-            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
         }
+
         .hint {
-            margin-top: 15px;
-            color: #666;
-            font-size: 0.9em;
+            margin-top: 20px;
+            font-size: 0.85em;
+            color: #777;
+            background: #f8f9fc;
+            padding: 10px;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
 
-    <div class="box">
-        <p><a href="/taches">Mes tâches</a> (protégé : user/12345)</p>
+<div class="card">
+    <h1>Bienvenue 👋</h1>
 
-        <div class="hint">
-            Utilisateur : <b>user / 12345</b> (Basic Auth)<br>
-            Admin : <b>admin / password</b>
-        </div>
+    <a href="/taches" class="button">Accéder à mes tâches</a>
+
+    <div class="hint">
+        🔐 Utilisateur : <b>user / 12345</b><br>
+        👑 Admin : <b>admin / password</b>
     </div>
+</div>
 
 </body>
 </html>
