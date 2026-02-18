@@ -1,60 +1,144 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Mes tâches</title>
+<meta charset="UTF-8">
+<title>Mes tâches</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        padding: 40px;
+        background: #f4f6f9;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    a {
+        text-decoration: none;
+        color: #4e73df;
+        font-weight: bold;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: auto;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .card.completed {
+        background: #eafaf1;
+        border-left: 6px solid #1cc88a;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background: #4e73df;
+        color: white;
+    }
+
+    .btn-success {
+        background: #1cc88a;
+        color: white;
+    }
+
+    .btn-danger {
+        background: #e74a3b;
+        color: white;
+    }
+
+    .btn-primary:hover,
+    .btn-success:hover,
+    .btn-danger:hover {
+        opacity: 0.9;
+    }
+
+    form.inline {
+        display: inline;
+    }
+</style>
 </head>
 <body>
-  <h1>Gestionnaire de tâches</h1>
 
-  <p><a href="/">⬅ Retour accueil</a></p>
+<div class="container">
 
-  <h2>Ajouter une tâche</h2>
-  <form method="post" action="/taches/ajouter">
-    <p>
-      <label>Titre</label><br>
-      <input name="titre" required>
-    </p>
-    <p>
-      <label>Description</label><br>
-      <textarea name="description" rows="3" required></textarea>
-    </p>
-    <p>
-      <label>Date d'échéance</label><br>
-      <input type="date" name="date_echeance">
-    </p>
-    <button type="submit">Ajouter</button>
-  </form>
+<h1>📋 Gestionnaire de tâches</h1>
 
-  <hr>
+<p><a href="/">⬅ Retour accueil</a></p>
 
-  <h2>Mes tâches</h2>
+<div class="card">
+<h2>Ajouter une tâche</h2>
+<form method="post" action="/taches/ajouter">
+    <label>Titre</label>
+    <input name="titre" required>
 
-  {% if taches|length == 0 %}
-    <p>Aucune tâche.</p>
-  {% else %}
-    <ul>
-      {% for t in taches %}
-        <li>
-          <b>{{ t["titre"] }}</b>
-          {% if t["terminee"] == 1 %} ✅ (terminée) {% endif %}
-          {% if t["date_echeance"] %} — échéance : {{ t["date_echeance"] }} {% endif %}
-          <br>
-          {{ t["description"] }}
+    <label>Description</label>
+    <textarea name="description" rows="3" required></textarea>
 
-          <form method="post" action="/taches/terminer/{{ t['id'] }}" style="display:inline;">
-            <button type="submit">
-              {% if t["terminee"] == 1 %}Marquer non terminée{% else %}Marquer terminée{% endif %}
-            </button>
-          </form>
+    <label>Date d'échéance</label>
+    <input type="date" name="date_echeance">
 
-          <form method="post" action="/taches/supprimer/{{ t['id'] }}" style="display:inline;">
-            <button type="submit">Supprimer</button>
-          </form>
-        </li>
-        <hr>
-      {% endfor %}
-    </ul>
-  {% endif %}
+    <button type="submit" class="btn-primary">Ajouter</button>
+</form>
+</div>
+
+<h2>Mes tâches</h2>
+
+{% if taches|length == 0 %}
+    <p>Aucune tâche pour le moment 🚀</p>
+{% else %}
+    {% for t in taches %}
+        <div class="card {% if t['terminee'] == 1 %}completed{% endif %}">
+            <h3>{{ t["titre"] }}</h3>
+
+            {% if t["terminee"] == 1 %}
+                <p>✅ Tâche terminée</p>
+            {% endif %}
+
+            {% if t["date_echeance"] %}
+                <p><strong>Échéance :</strong> {{ t["date_echeance"] }}</p>
+            {% endif %}
+
+            <p>{{ t["description"] }}</p>
+
+            <form method="post" action="/taches/terminer/{{ t['id'] }}" class="inline">
+                <button type="submit" class="btn-success">
+                    {% if t["terminee"] == 1 %}Annuler{% else %}Terminer{% endif %}
+                </button>
+            </form>
+
+            <form method="post" action="/taches/supprimer/{{ t['id'] }}" class="inline">
+                <button type="submit" class="btn-danger">Supprimer</button>
+            </form>
+        </div>
+    {% endfor %}
+{% endif %}
+
+</div>
 </body>
 </html>
