@@ -6,3 +6,13 @@ CREATE TABLE clients (
     prenom TEXT NOT NULL,
     adresse TEXT NOT NULL
 );
+
+DROP TABLE IF EXISTS taches;
+CREATE TABLE taches (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    titre TEXT NOT NULL,
+    description TEXT NOT NULL,
+    date_echeance TEXT,
+    terminee INTEGER DEFAULT 0
+);
+
