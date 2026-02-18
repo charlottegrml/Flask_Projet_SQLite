@@ -12,6 +12,11 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'  # Clé secrète pour les sessions
 def est_authentifie():
     return session.get('authentifie')
 
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
 @app.route('/')
 def hello_world():
     return render_template('hello.html')
@@ -37,6 +42,8 @@ def Readfichenom(nom):
     conn.close()
 
    return render_template('fiche_nom.html', data=data)
+
+
 
 @app.route('/lecture')
 def lecture():
