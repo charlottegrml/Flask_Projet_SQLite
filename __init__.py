@@ -108,3 +108,65 @@ def enregistrer_client():
                                                                                                                                        
 if __name__ == "__main__":
   app.run(debug=True)
+
+
+@app.route('/taches')
+def taches():
+    auth = request.authorization
+    if not auth or not (auth.username == 'user' and auth.password == '12345'):
+        return Response(
+            'Connexion requise. Identifiants : user / 12345', 401,
+            {'WWW-Authenticate': 'Basic realm="Login Required"'}
+        )
+
+    conn = get_db_connection()
+    taches = conn.execute('SELECT * FROM taches ORDER BY id DESC').fetchall()
+    conn.close()
+
+    return render_template('taches.html', taches=taches)
+
+
+@app.route('/taches/ajouter', methods=['POST'])
+def ajouter_tache():
+    conn = get_db_connection()
+
+    conn.execute(
+        'INSERT INTO taches (titre, description, date_echeance) VALUES (?, ?, ?)',
+        (
+            request.form['titre'],
+            request.form['description'],
+            request.form['date_echeance']
+        )
+    )
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for('taches'))
+
+@app.route('/taches/terminer/<int:id>', methods=['POST'])
+def terminer_tache(id):
+    conn = get_db_connection()
+
+    tache = conn.execute('SELECT terminee FROM taches WHERE id = ?', (id,)).fetchone()
+
+    nouveau_statut = 0 if tache["terminee"] == 1 else 1
+
+    conn.execute(
+        'UPDATE taches SET terminee = ? WHERE id = ?',
+        (nouveau_statut, id)
+    )
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for('taches'))
+
+@app.route('/taches/supprimer/<int:id>', methods=['POST'])
+def supprimer_tache(id):
+    conn = get_db_connection()
+
+    conn.execute('DELETE FROM taches WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for('taches'))
+
