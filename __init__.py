@@ -26,23 +26,6 @@ def check_user_auth():
     auth = request.authorization
     return auth and auth.username == 'user' and auth.password == '12345'
 
-@app.route('/fiche_nom/<string:nom>')
-def Readfichenom(nom):
-    auth = request.authorization
-    if not auth or not (auth.username == 'user' and auth.password == '12345'):
-        return Response(
-            'Connexion requise. Identifiants : user / 12345', 401,
-            {'WWW-Authenticate': 'Basic realm="Login Required"'}
-        )
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM clients WHERE nom = ?', (nom.upper(),))
-
-    data = cursor.fetchall()
-    conn.close()
-
-   return render_template('fiche_nom.html', data=data)
-
 
 
 @app.route('/lecture')
